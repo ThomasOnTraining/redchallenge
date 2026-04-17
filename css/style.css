@@ -1,0 +1,586 @@
+/* ==========================================================================
+   Base Tokens & Variables (Anti AI-Slop Theme)
+   ========================================================================== */
+:root {
+    /* Color Palette */
+    --bg-dark: #09090b;          /* Super dark slate */
+    --bg-card: rgba(24, 24, 27, 0.6); /* Translucent Zinc */
+    --bg-card-hover: rgba(39, 39, 42, 0.7);
+    --border-color: rgba(255, 255, 255, 0.08);
+    
+    /* Accents (Neon Gamification vibe) */
+    --accent-purple: #8b5cf6;
+    --accent-purple-glow: rgba(139, 92, 246, 0.4);
+    --accent-cyan: #06b6d4;
+    --accent-orange: #f97316;
+    
+    /* Typography */
+    --text-primary: #f4f4f5;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+    
+    /* Structure */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-pill: 99px;
+    
+    --nav-width: 260px;
+    --feed-max-width: 680px;
+
+    /* Transitions */
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ==========================================================================
+   Global Reset & Base
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+    line-height: 1.5;
+}
+
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+input { font-family: inherit; }
+
+/* Custom Fonts for Headings */
+h1, h2, h3, .brand-text {
+    font-family: 'Syne', sans-serif;
+    letter-spacing: -0.03em;
+}
+
+/* ==========================================================================
+   Bespoke Aesthetics (Backgrounds & Effects)
+   ========================================================================== */
+.noise-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: -2;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.glow-1 {
+    top: -10%; right: -5%;
+    width: 50vw; height: 50vw;
+    background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(9,9,11,0) 70%);
+}
+
+.glow-2 {
+    bottom: -20%; left: -10%;
+    width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, rgba(9,9,11,0) 70%);
+}
+
+/* ==========================================================================
+   Layout Architecture
+   ========================================================================== */
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Main Content Area */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Margin for Desktop Navbar */
+    margin-left: var(--nav-width);
+}
+
+.feed-container {
+    width: 100%;
+    max-width: var(--feed-max-width);
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 5rem; /* Space for top header */
+}
+
+/* ==========================================================================
+   Desktop Sidebar Setup
+   ========================================================================== */
+.main-nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--nav-width);
+    height: 100vh;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+    background: rgba(9, 9, 11, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 50;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+    padding-left: 0.75rem;
+}
+
+.brand-icon {
+    color: var(--accent-purple);
+    width: 28px; height: 28px;
+}
+
+.brand-text {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.brand-text .highlight {
+    color: var(--accent-cyan);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    font-weight: 500;
+    transition: var(--transition-fast);
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.nav-item.active .nav-link {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Avatar Mini */
+.avatar-sm, .avatar-md, .avatar-xs {
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.avatar-sm { width: 32px; height: 32px; }
+.avatar-md { width: 44px; height: 44px; border: 2px solid var(--border-color); }
+.avatar-xs { width: 24px; height: 24px; }
+.avatar-sm img, .avatar-md img, .avatar-xs img { width: 100%; height: 100%; object-fit: cover; }
+
+.outline-avatar { border: 2px solid var(--accent-purple); padding: 1px; }
+
+/* Call To Action Botão na Nav */
+.action-wrapper {
+    margin-top: 1rem;
+}
+
+.nav-link.call-to-action {
+    background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
+    color: white;
+    justify-content: center;
+    font-weight: 600;
+    box-shadow: 0 0 20px var(--accent-purple-glow);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.nav-link.call-to-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 25px var(--accent-purple-glow);
+}
+
+
+/* ==========================================================================
+   Header Superior
+   ========================================================================== */
+.top-header {
+    width: 100%;
+    max-width: var(--feed-max-width);
+    position: fixed;
+    top: 0;
+    padding: 1.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(9,9,11,1) 0%, rgba(9,9,11,0.8) 60%, rgba(9,9,11,0) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 40;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.glass-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: var(--transition-bounce);
+    position: relative;
+}
+
+.glass-btn:hover {
+    background: rgba(255,255,255,0.1);
+    transform: scale(1.05);
+}
+
+.badge {
+    position: absolute;
+    top: 0; right: 0;
+    background: var(--accent-orange);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--bg-dark);
+}
+
+/* ==========================================================================
+   Feed Cards
+   ========================================================================== */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Post Creator Box */
+.create-post-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.post-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.05rem;
+    outline: none;
+}
+
+.post-input::placeholder {
+    color: var(--text-muted);
+}
+
+.glass-action {
+    background: var(--accent-purple);
+    color: white;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: var(--transition-bounce);
+}
+.glass-action:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Post Cards */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.card-author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.author-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-name {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.post-time {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.card-body p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+}
+
+.card-footer {
+    display: flex;
+    gap: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    transition: var(--transition-fast);
+}
+
+.action-btn:hover {
+    color: var(--text-primary);
+}
+
+.active-like {
+    color: #ef4444 !important;
+}
+.ml-auto { margin-left: auto; }
+
+/* ==========================================================================
+   Desafios Cards (Premium UI)
+   ========================================================================== */
+.challenge-card {
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: linear-gradient(145deg, rgba(24,24,27,0.8) 0%, rgba(139,92,246,0.05) 100%);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.card-edge-glow {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
+}
+
+.challenge-badge {
+    background: rgba(249, 115, 22, 0.15);
+    color: var(--accent-orange);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.challenge-badge i { width: 14px; height: 14px; }
+
+.challenge-title {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.challenge-desc {
+    color: var(--text-secondary);
+}
+
+.challenge-action-box {
+    margin-top: 1.5rem;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vs-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.vs-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.skeleton-avatar {
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+}
+
+.btn-accent {
+    background: var(--text-primary);
+    color: var(--bg-dark);
+    padding: 0.6rem 1.25rem;
+    border-radius: var(--radius-pill);
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition-bounce);
+}
+
+.btn-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+}
+
+.pulse {
+    animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+}
+
+.scroll-pad { height: 100px; }
+
+
+/* ==========================================================================
+   Responsive: Mobile View (Bottom Navigation)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .main-nav {
+        top: auto;
+        bottom: 0;
+        width: 100%;
+        height: 70px;
+        flex-direction: row;
+        border-right: none;
+        border-top: 1px solid var(--border-color);
+        padding: 0.5rem 1rem;
+        background: rgba(9, 9, 11, 0.85); /* Slightly less translucent on mobile */
+        justify-content: center;
+        padding-bottom: env(safe-area-inset-bottom, 0.5rem);
+    }
+    
+    .nav-brand { display: none; }
+    
+    .content-area {
+        margin-left: 0;
+    }
+    
+    .nav-links {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        gap: 0;
+    }
+    
+    .nav-item {
+        margin-top: 0;
+    }
+    
+    .nav-link {
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 0.5rem;
+        font-size: 0; /* Hide default text gracefully */
+        justify-content: center;
+    }
+    
+    .mobile-hidden {
+        display: none;
+    }
+    
+    /* Revisa icones */
+    .nav-link i {
+        width: 24px; height: 24px;
+    }
+    
+    .nav-item.active .nav-link {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        color: var(--accent-purple);
+    }
+    
+    /* Floating action button (FAB) effect for CTA */
+    .nav-link.call-to-action {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 56px; height: 56px;
+        border-radius: 50%;
+        box-shadow: 0 5px 20px var(--accent-purple-glow);
+    }
+    
+    .nav-item.action-wrapper {
+        position: static;
+    }
+    
+    /* Centralize o FAB no espaço ocupado na lista */
+    .nav-item:nth-child(3) {
+        width: 60px; /* Aloca espaço pro FAB na nav-links */
+    }
+    
+    .challenge-action-box {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .btn-accent {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .feed-container {
+        margin-top: 4rem;
+    }
+}

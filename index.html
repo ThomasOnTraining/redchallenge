@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DesafioHub</title>
+    <!-- Anti AI-SLOP Fonts: Syne for expressiveness, Inter for readability -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Bespoke design layers -->
+    <div class="noise-bg"></div>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    
+    <div class="app-layout">
+        <!-- Desktop Sidebar / Mobile Bottom Nav -->
+        <nav class="main-nav">
+            <div class="nav-brand">
+                <i data-lucide="zap" class="brand-icon"></i>
+                <span class="brand-text">Desafio<span class="highlight">Hub</span></span>
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item active">
+                    <a href="#" class="nav-link">
+                        <i data-lucide="home"></i>
+                        <span>Feed</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i data-lucide="swords"></i>
+                        <span>Desafios</span>
+                    </a>
+                </li>
+                <!-- Botão de Post Principal Responsivo -->
+                <li class="nav-item action-wrapper">
+                    <a href="#" class="nav-link call-to-action">
+                        <i data-lucide="target" class="target-icon"></i>
+                        <span class="mobile-hidden">Lançar</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i data-lucide="users"></i>
+                        <span>Equipe</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="avatar-sm outline-avatar">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aurelio&backgroundColor=1e1b4b" alt="Você">
+                        </div>
+                        <span class="mobile-hidden text-label">Perfil</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <header class="top-header">
+                <h1 class="page-title">Feed Público</h1>
+                <div class="header-actions">
+                    <button class="icon-btn glass-btn" aria-label="Notificações">
+                        <i data-lucide="bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="feed-container">
+                <!-- Status/Post Creator -->
+                <div class="card create-post-card">
+                    <div class="avatar-md">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aurelio&backgroundColor=1e1b4b" alt="Você">
+                    </div>
+                    <input type="text" class="post-input" placeholder="Proponha um desafio, ou compartilhe algo...">
+                    <button class="btn btn-primary glass-action"><i data-lucide="send"></i></button>
+                </div>
+
+                <!-- Feed Card: Desafio Misto (Destaque Premium) -->
+                <div class="card challenge-card">
+                    <div class="card-edge-glow"></div>
+                    <div class="card-header">
+                        <div class="card-author">
+                            <div class="avatar-sm"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Andriellyn&backgroundColor=8b5cf6" alt="Andriellyn"></div>
+                            <div class="author-info">
+                                <span class="author-name">Andriellyn</span>
+                                <span class="post-time">há 2h</span>
+                            </div>
+                        </div>
+                        <div class="challenge-badge">
+                            <i data-lucide="flame"></i> Duelo 1v1
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="challenge-title">1v1: Velocidade Tech ⌚</h2>
+                        <p class="challenge-desc">Duvido você me vencer nesse quiz hiper-rápido de 10 segundos sobre a história da Web. Quem perder paga 50 pontos!</p>
+                        
+                        <div class="challenge-action-box">
+                            <div class="vs-container">
+                                <div class="avatar-xs"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Andriellyn&backgroundColor=8b5cf6" alt="Andriellyn"></div>
+                                <span class="vs-text">VS</span>
+                                <div class="avatar-xs skeleton-avatar"><i data-lucide="help-circle"></i></div>
+                            </div>
+                            <button class="btn btn-accent pulse"><i data-lucide="swords"></i> Aceitar Duelo</button>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="action-btn"><i data-lucide="heart"></i> 14</button>
+                        <button class="action-btn"><i data-lucide="message-square"></i> 3</button>
+                        <button class="action-btn ml-auto"><i data-lucide="share-2"></i></button>
+                    </div>
+                </div>
+
+                <!-- Feed Card: Post Normal -->
+                <div class="card post-card">
+                    <div class="card-header">
+                        <div class="card-author">
+                            <div class="avatar-sm"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ruan&backgroundColor=10b981" alt="Ruan"></div>
+                            <div class="author-info">
+                                <span class="author-name">Ruan</span>
+                                <span class="post-time">há 5h</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p>As mecânicas cooperativas estão fazendo muita diferença na interação geral do sistema hoje, não acham?</p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="action-btn active-like"><i data-lucide="heart" fill="currentColor"></i> 25</button>
+                        <button class="action-btn"><i data-lucide="message-square"></i> 12</button>
+                        <button class="action-btn ml-auto"><i data-lucide="share-2"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scroll-pad"></div>
+        </main>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
