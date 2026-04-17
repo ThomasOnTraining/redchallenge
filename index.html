@@ -14,6 +14,39 @@
 </head>
 <body>
     <div class="noise-bg"></div>
+    <div id="drawer-overlay" class="drawer-overlay"></div>
+
+    <!-- Side Navigation Sidebar -->
+    <nav id="side-navigation" class="side-navigation">
+        <div class="sidebar-header">
+            <i data-lucide="zap" class="brand-icon"></i>
+            <span class="brand-text">Desafio<span class="highlight">Hub</span></span>
+        </div>
+        <div class="sidebar-links">
+            <a href="#" class="sidebar-link active" data-target="view-home">
+                <i data-lucide="home"></i>
+                <span>Início</span>
+            </a>
+            <a href="#" class="sidebar-link" data-target="view-challenges">
+                <i data-lucide="swords"></i>
+                <span>Desafios</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i data-lucide="trending-up"></i>
+                <span>Popular</span>
+            </a>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-group-title">Comunidades</div>
+            <a href="#" class="sidebar-link">
+                <div class="avatar-xs" style="background: var(--accent-brand); color: white;">T</div>
+                <span>Tech</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <div class="avatar-xs" style="background: #4ade80; color: white;">H</div>
+                <span>Saúde</span>
+            </a>
+        </div>
+    </nav>
 
     <!-- Top Navigation (Reddit style) -->
     <nav class="topbar">
@@ -28,6 +61,10 @@
         </div>
 
         <div class="topbar-center">
+            <div class="top-nav-tabs">
+                <button class="top-tab active" data-target="view-home">Feed</button>
+                <button class="top-tab" data-target="view-challenges">Desafios</button>
+            </div>
             <div class="search-bar">
                 <i data-lucide="search" class="search-icon"></i>
                 <input type="text" placeholder="Buscar no DesafioHub...">
@@ -57,7 +94,9 @@
         <!-- Left: Main Feed -->
         <main class="feed-column">
             
-            <!-- Create Post Box -->
+            <!-- VIEW: HOME -->
+            <div id="view-home" class="view active">
+                <!-- Create Post Box -->
             <div class="card create-post-card">
                 <div class="avatar-sm">
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin&backgroundColor=1e1b4b" alt="Você">
@@ -78,6 +117,25 @@
                 
                 <!-- JS Templates will be injected here -->
             </div>
+            </div> <!-- End VIEW HOME -->
+
+            <!-- VIEW: CHALLENGES -->
+            <div id="view-challenges" class="view hidden">
+                <div class="card create-post-card challenge-input-card">
+                    <div class="avatar-sm">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin&backgroundColor=1e1b4b" alt="Você">
+                    </div>
+                    <input type="text" class="challenge-input" placeholder="Propor um Desafio ou Quizz para a comunidade!">
+                    <button class="nav-action-btn pulse-target challenge-submit-btn">
+                        <span>Lançar</span>
+                    </button>
+                </div>
+
+                <div class="feed-list" id="challenges-container">
+                    <!-- Challenges injected here -->
+                </div>
+            </div> <!-- End VIEW CHALLENGES -->
+
         </main>
 
         <!-- Right: Sidebar (Communities / Rules) -->
@@ -165,8 +223,8 @@
 
     <!-- Mobile Bottom Navigation (Visible only on mobile) -->
     <nav class="mobile-bottom-nav">
-        <a href="#" class="mobile-nav-item active"><i data-lucide="home"></i></a>
-        <a href="#" class="mobile-nav-item"><i data-lucide="swords"></i></a>
+        <a href="#" class="mobile-nav-item active" data-target="view-home"><i data-lucide="home"></i></a>
+        <a href="#" class="mobile-nav-item" data-target="view-challenges"><i data-lucide="swords"></i></a>
         <a href="#" class="mobile-nav-item create-btn"><i data-lucide="plus"></i></a>
         <a href="#" class="mobile-nav-item"><i data-lucide="message-circle"></i></a>
         <a href="#" class="mobile-nav-item"><i data-lucide="user"></i></a>
