@@ -4,146 +4,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DesafioHub</title>
-    <!-- Anti AI-SLOP Fonts: Syne for expressiveness, Inter for readability -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Bespoke design layers -->
     <div class="noise-bg"></div>
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2"></div>
-    
-    <div class="app-layout">
-        <!-- Desktop Sidebar / Mobile Bottom Nav -->
-        <nav class="main-nav">
+
+    <!-- Top Navigation (Reddit style) -->
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="icon-btn mobile-menu-btn" aria-label="Menu">
+                <i data-lucide="menu"></i>
+            </button>
             <div class="nav-brand">
                 <i data-lucide="zap" class="brand-icon"></i>
                 <span class="brand-text">Desafio<span class="highlight">Hub</span></span>
             </div>
-            <ul class="nav-links">
-                <li class="nav-item active">
-                    <a href="#" class="nav-link">
-                        <i data-lucide="home"></i>
-                        <span>Feed</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i data-lucide="swords"></i>
-                        <span>Desafios</span>
-                    </a>
-                </li>
-                <!-- Botão de Post Principal Responsivo -->
-                <li class="nav-item action-wrapper">
-                    <a href="#" class="nav-link call-to-action">
-                        <i data-lucide="target" class="target-icon"></i>
-                        <span class="mobile-hidden">Lançar</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i data-lucide="users"></i>
-                        <span>Equipe</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <div class="avatar-sm outline-avatar">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aurelio&backgroundColor=1e1b4b" alt="Você">
-                        </div>
-                        <span class="mobile-hidden text-label">Perfil</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        </div>
 
-        <!-- Main Content Area -->
-        <main class="content-area">
-            <header class="top-header">
-                <h1 class="page-title">Feed Público</h1>
-                <div class="header-actions">
-                    <button class="icon-btn glass-btn" aria-label="Notificações">
-                        <i data-lucide="bell"></i>
-                        <span class="badge">3</span>
-                    </button>
+        <div class="topbar-center">
+            <div class="search-bar">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" placeholder="Buscar no DesafioHub...">
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="nav-action-btn pulse-target" aria-label="Criar Novo">
+                <i data-lucide="plus"></i>
+                <span>Criar</span>
+            </button>
+            <button class="icon-btn" aria-label="Notificações">
+                <i data-lucide="bell"></i>
+                <span class="badge">1</span>
+            </button>
+            <div class="profile-dropdown">
+                <div class="avatar-sm">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin&backgroundColor=1e1b4b" alt="Você">
                 </div>
-            </header>
+            </div>
+        </div>
+    </nav>
 
-            <div class="feed-container">
-                <!-- Status/Post Creator -->
-                <div class="card create-post-card">
-                    <div class="avatar-md">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aurelio&backgroundColor=1e1b4b" alt="Você">
-                    </div>
-                    <input type="text" class="post-input" placeholder="Proponha um desafio, ou compartilhe algo...">
-                    <button class="btn btn-primary glass-action"><i data-lucide="send"></i></button>
+    <!-- Main Layout (2 Columns) -->
+    <div class="reddit-layout">
+        
+        <!-- Left: Main Feed -->
+        <main class="feed-column">
+            
+            <!-- Create Post Box -->
+            <div class="card create-post-card">
+                <div class="avatar-sm">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin&backgroundColor=1e1b4b" alt="Você">
                 </div>
+                <input type="text" class="post-input" placeholder="Criar Postagem ou Propor Desafio">
+                <button class="icon-btn" aria-label="Anexar Imagem"><i data-lucide="image"></i></button>
+                <button class="icon-btn" aria-label="Anexar Link"><i data-lucide="link"></i></button>
+            </div>
 
-                <!-- Feed Card: Desafio Misto (Destaque Premium) -->
-                <div class="card challenge-card">
-                    <div class="card-edge-glow"></div>
-                    <div class="card-header">
-                        <div class="card-author">
-                            <div class="avatar-sm"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Andriellyn&backgroundColor=8b5cf6" alt="Andriellyn"></div>
-                            <div class="author-info">
-                                <span class="author-name">Andriellyn</span>
-                                <span class="post-time">há 2h</span>
-                            </div>
-                        </div>
-                        <div class="challenge-badge">
-                            <i data-lucide="flame"></i> Duelo 1v1
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="challenge-title">1v1: Velocidade Tech ⌚</h2>
-                        <p class="challenge-desc">Duvido você me vencer nesse quiz hiper-rápido de 10 segundos sobre a história da Web. Quem perder paga 50 pontos!</p>
-                        
-                        <div class="challenge-action-box">
-                            <div class="vs-container">
-                                <div class="avatar-xs"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Andriellyn&backgroundColor=8b5cf6" alt="Andriellyn"></div>
-                                <span class="vs-text">VS</span>
-                                <div class="avatar-xs skeleton-avatar"><i data-lucide="help-circle"></i></div>
-                            </div>
-                            <button class="btn btn-accent pulse"><i data-lucide="swords"></i> Aceitar Duelo</button>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <button class="action-btn"><i data-lucide="heart"></i> 14</button>
-                        <button class="action-btn"><i data-lucide="message-square"></i> 3</button>
-                        <button class="action-btn ml-auto"><i data-lucide="share-2"></i></button>
-                    </div>
+            <!-- Feed Container (Dynamic rendering via JS) -->
+            <div class="feed-list" id="feed-container">
+                <!-- Empty State (No Fake Posts) -->
+                <div class="empty-state">
+                    <i data-lucide="inbox" class="empty-icon"></i>
+                    <h2>O seu feed está vazio.</h2>
+                    <p>Seja o primeiro a lançar um desafio para a comunidade ou explore novos tópicos.</p>
                 </div>
+                
+                <!-- JS Templates will be injected here -->
+            </div>
+        </main>
 
-                <!-- Feed Card: Post Normal -->
-                <div class="card post-card">
-                    <div class="card-header">
-                        <div class="card-author">
-                            <div class="avatar-sm"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ruan&backgroundColor=10b981" alt="Ruan"></div>
-                            <div class="author-info">
-                                <span class="author-name">Ruan</span>
-                                <span class="post-time">há 5h</span>
-                            </div>
+        <!-- Right: Sidebar (Communities / Rules) -->
+        <aside class="sidebar-column">
+            <div class="sidebar-widget">
+                <div class="widget-header">
+                    <h3 class="widget-title">Sobre o DesafioHub</h3>
+                </div>
+                <div class="widget-body">
+                    <p class="widget-desc">A comunidade focada em trocar conhecimentos por meio de micro-desafios e interação gamificada.</p>
+                    <div class="widget-stats">
+                        <div class="stat-box">
+                            <span class="stat-num">0</span>
+                            <span class="stat-label">Desafios</span>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <p>As mecânicas cooperativas estão fazendo muita diferença na interação geral do sistema hoje, não acham?</p>
-                    </div>
-                    <div class="card-footer">
-                        <button class="action-btn active-like"><i data-lucide="heart" fill="currentColor"></i> 25</button>
-                        <button class="action-btn"><i data-lucide="message-square"></i> 12</button>
-                        <button class="action-btn ml-auto"><i data-lucide="share-2"></i></button>
+                        <div class="stat-box">
+                            <span class="stat-num">1</span>
+                            <span class="stat-label">Membro</span>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="sidebar-widget">
+                <div class="widget-header">
+                    <h3 class="widget-title">🔥 Destaques</h3>
+                </div>
+                <div class="widget-body">
+                    <ul class="trending-list">
+                        <li>
+                            <i data-lucide="trending-up"></i>
+                            <div class="trending-info">
+                                <span>#TechQuizz</span>
+                                <small>0 posts</small>
+                            </div>
+                        </li>
+                        <li>
+                            <i data-lucide="trending-up"></i>
+                            <div class="trending-info">
+                                <span>#MicroHabitos</span>
+                                <small>0 posts</small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             
-            <div class="scroll-pad"></div>
-        </main>
+            <div class="footer-links">
+                <a href="#">Regras</a> • 
+                <a href="#">Ajuda</a> • 
+                <a href="#">Privacidade</a>
+                <p>DesafioHub © 2026</p>
+            </div>
+        </aside>
     </div>
+
+    <!-- Config de Templates (Estrutura pronta para o Feed) -->
+    <template id="post-template">
+        <article class="reddit-card">
+            <!-- Left Vote Column -->
+            <div class="vote-column">
+                <button class="vote-btn upvote"><i data-lucide="arrow-big-up"></i></button>
+                <span class="vote-count">0</span>
+                <button class="vote-btn downvote"><i data-lucide="arrow-big-down"></i></button>
+            </div>
+            <!-- Right Content Column -->
+            <div class="post-content-column">
+                <div class="post-meta">
+                    <div class="avatar-xs"><i data-lucide="user"></i></div>
+                    <span class="author-label" data-value="author">Username</span>
+                    <span class="time-label" data-value="time">agora</span>
+                    <span class="badge-tag" data-value="tag" style="display: none;"></span>
+                </div>
+                <h2 class="post-title" data-value="title">Title Placeholder</h2>
+                <div class="post-body" data-value="body">Content Placeholder</div>
+                
+                <div class="post-actions">
+                    <button class="action-btn"><i data-lucide="message-square"></i> <span data-value="comments">0</span> Comentários</button>
+                    <button class="action-btn"><i data-lucide="share"></i> Compartilhar</button>
+                    <button class="action-btn"><i data-lucide="bookmark"></i> Salvar</button>
+                </div>
+            </div>
+        </article>
+    </template>
+
+    <!-- Mobile Bottom Navigation (Visible only on mobile) -->
+    <nav class="mobile-bottom-nav">
+        <a href="#" class="mobile-nav-item active"><i data-lucide="home"></i></a>
+        <a href="#" class="mobile-nav-item"><i data-lucide="swords"></i></a>
+        <a href="#" class="mobile-nav-item create-btn"><i data-lucide="plus"></i></a>
+        <a href="#" class="mobile-nav-item"><i data-lucide="message-circle"></i></a>
+        <a href="#" class="mobile-nav-item"><i data-lucide="user"></i></a>
+    </nav>
 
     <script src="js/script.js"></script>
 </body>

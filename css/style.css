@@ -1,36 +1,37 @@
 /* ==========================================================================
-   Base Tokens & Variables (Anti AI-Slop Theme)
+   Base Tokens & Variables - "Anti AI-Slop" Reddit Aesthetic
    ========================================================================== */
 :root {
-    /* Color Palette */
-    --bg-dark: #09090b;          /* Super dark slate */
-    --bg-card: rgba(24, 24, 27, 0.6); /* Translucent Zinc */
-    --bg-card-hover: rgba(39, 39, 42, 0.7);
-    --border-color: rgba(255, 255, 255, 0.08);
+    /* Color Palette - Deeper darks with high contrast accents */
+    --bg-ground: #030303;        /* Pitch black Reddit feel */
+    --bg-card: #121212;          /* True dark grey for cards */
+    --bg-card-hover: #1a1a1b;    
+    --border-color: #272729;      /* Reddit dark mode border */
+    --border-hover: #343536;
     
-    /* Accents (Neon Gamification vibe) */
-    --accent-purple: #8b5cf6;
-    --accent-purple-glow: rgba(139, 92, 246, 0.4);
-    --accent-cyan: #06b6d4;
-    --accent-orange: #f97316;
+    /* Accents (Reddit Orange & Upvote/Downvote) */
+    --accent-brand: #ff4500;      /* Reddit orange variant */
+    --upvote-color: #ff4500;
+    --downvote-color: #7193ff;
+    --btn-primary: #f4f4f5;
+    --btn-primary-text: #09090b;
+    --btn-secondary: #272729;
+    --btn-secondary-hover: #343536;
     
     /* Typography */
-    --text-primary: #f4f4f5;
-    --text-secondary: #a1a1aa;
-    --text-muted: #71717a;
+    --text-primary: #d7dadc;      /* Reddit standard text color */
+    --text-secondary: #818384;
+    --text-muted: #565758;
     
     /* Structure */
-    --radius-sm: 8px;
-    --radius-md: 16px;
-    --radius-lg: 24px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
     --radius-pill: 99px;
     
-    --nav-width: 260px;
-    --feed-max-width: 680px;
-
-    /* Transitions */
-    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --topbar-height: 56px;
+    --feed-max-width: 640px;
+    --sidebar-width: 312px;
 }
 
 /* ==========================================================================
@@ -40,14 +41,14 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-tap-highlight-color: transparent;
 }
 
 body {
-    background-color: var(--bg-dark);
+    background-color: var(--bg-ground);
     color: var(--text-primary);
-    overflow-x: hidden;
+    overflow-y: scroll;
     line-height: 1.5;
 }
 
@@ -55,532 +56,345 @@ a { text-decoration: none; color: inherit; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
 input { font-family: inherit; }
 
-/* Custom Fonts for Headings */
 h1, h2, h3, .brand-text {
     font-family: 'Syne', sans-serif;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
 }
 
 /* ==========================================================================
-   Bespoke Aesthetics (Backgrounds & Effects)
+   Bespoke Layers (Anti-Slop subtle textures)
    ========================================================================== */
 .noise-bg {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     pointer-events: none;
     z-index: -2;
-    opacity: 0.03;
+    opacity: 0.04;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-.glow {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(120px);
-    z-index: -1;
-    pointer-events: none;
-}
-
-.glow-1 {
-    top: -10%; right: -5%;
-    width: 50vw; height: 50vw;
-    background: radial-gradient(circle, rgba(139,92,246,0.15) 0%, rgba(9,9,11,0) 70%);
-}
-
-.glow-2 {
-    bottom: -20%; left: -10%;
-    width: 60vw; height: 60vw;
-    background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, rgba(9,9,11,0) 70%);
-}
-
 /* ==========================================================================
-   Layout Architecture
+   Top Navigation
    ========================================================================== */
-.app-layout {
+.topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--topbar-height);
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
-    min-height: 100vh;
-    width: 100%;
-}
-
-/* Main Content Area */
-.content-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    /* Margin for Desktop Navbar */
-    margin-left: var(--nav-width);
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    z-index: 100;
 }
 
-.feed-container {
-    width: 100%;
-    max-width: var(--feed-max-width);
-    padding: 0 1rem;
+.topbar-left, .topbar-right {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 5rem; /* Space for top header */
+    align-items: center;
+    gap: 1.25rem;
 }
 
-/* ==========================================================================
-   Desktop Sidebar Setup
-   ========================================================================== */
-.main-nav {
-    position: fixed;
-    top: 0; left: 0;
-    width: var(--nav-width);
-    height: 100vh;
-    padding: 2rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid var(--border-color);
-    background: rgba(9, 9, 11, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    z-index: 50;
-}
+.mobile-menu-btn { display: none; }
 
 .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 3rem;
-    padding-left: 0.75rem;
+    display: flex; align-items: center; gap: 0.5rem;
 }
 
-.brand-icon {
-    color: var(--accent-purple);
-    width: 28px; height: 28px;
+.brand-icon { color: var(--accent-brand); fill: var(--accent-brand); }
+.brand-text { font-size: 1.3rem; font-weight: 800; color: #fff; }
+.highlight { color: var(--accent-brand); }
+
+.topbar-center {
+    flex: 1;
+    max-width: 600px;
+    margin: 0 2rem;
 }
 
-.brand-text {
-    font-size: 1.5rem;
-    font-weight: 800;
-}
-
-.brand-text .highlight {
-    color: var(--accent-cyan);
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.nav-link {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.875rem 1rem;
-    border-radius: var(--radius-md);
-    color: var(--text-secondary);
-    font-size: 1.05rem;
-    font-weight: 500;
-    transition: var(--transition-fast);
-}
-
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--text-primary);
-}
-
-.nav-item.active .nav-link {
-    background-color: var(--bg-card);
-    color: var(--text-primary);
+.search-bar {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: var(--btn-secondary);
     border: 1px solid var(--border-color);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-pill);
+    padding: 0.5rem 1rem;
+    transition: 0.2s;
 }
 
-/* Avatar Mini */
-.avatar-sm, .avatar-md, .avatar-xs {
-    border-radius: 50%;
-    overflow: hidden;
-    flex-shrink: 0;
+.search-bar:focus-within {
+    border-color: var(--text-secondary);
+    background: var(--bg-ground);
 }
 
-.avatar-sm { width: 32px; height: 32px; }
-.avatar-md { width: 44px; height: 44px; border: 2px solid var(--border-color); }
-.avatar-xs { width: 24px; height: 24px; }
-.avatar-sm img, .avatar-md img, .avatar-xs img { width: 100%; height: 100%; object-fit: cover; }
+.search-icon { width: 18px; color: var(--text-secondary); }
 
-.outline-avatar { border: 2px solid var(--accent-purple); padding: 1px; }
-
-/* Call To Action Botão na Nav */
-.action-wrapper {
-    margin-top: 1rem;
-}
-
-.nav-link.call-to-action {
-    background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
-    color: white;
-    justify-content: center;
-    font-weight: 600;
-    box-shadow: 0 0 20px var(--accent-purple-glow);
-    border: 1px solid rgba(255,255,255,0.2);
-}
-
-.nav-link.call-to-action:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 25px var(--accent-purple-glow);
-}
-
-
-/* ==========================================================================
-   Header Superior
-   ========================================================================== */
-.top-header {
-    width: 100%;
-    max-width: var(--feed-max-width);
-    position: fixed;
-    top: 0;
-    padding: 1.5rem 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(to bottom, rgba(9,9,11,1) 0%, rgba(9,9,11,0.8) 60%, rgba(9,9,11,0) 100%);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    z-index: 40;
-}
-
-.page-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-.glass-btn {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    transition: var(--transition-bounce);
-    position: relative;
-}
-
-.glass-btn:hover {
-    background: rgba(255,255,255,0.1);
-    transform: scale(1.05);
-}
-
-.badge {
-    position: absolute;
-    top: 0; right: 0;
-    background: var(--accent-orange);
-    color: white;
-    font-size: 0.65rem;
-    font-weight: 800;
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    border: 2px solid var(--bg-dark);
-}
-
-/* ==========================================================================
-   Feed Cards
-   ========================================================================== */
-.card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem;
-    transition: var(--transition-fast);
-    position: relative;
-    overflow: hidden;
-}
-
-/* Post Creator Box */
-.create-post-card {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-}
-
-.post-input {
+.search-bar input {
     flex: 1;
     background: transparent;
     border: none;
     color: var(--text-primary);
-    font-size: 1.05rem;
     outline: none;
+    font-size: 0.95rem;
 }
 
-.post-input::placeholder {
-    color: var(--text-muted);
-}
-
-.glass-action {
-    background: var(--accent-purple);
-    color: white;
+.icon-btn {
+    color: var(--text-secondary);
+    display: flex; align-items: center; justify-content: center;
     width: 40px; height: 40px;
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    transition: var(--transition-bounce);
-}
-.glass-action:hover {
-    transform: scale(1.1) rotate(5deg);
+    position: relative;
+    transition: 0.2s;
 }
 
-/* Post Cards */
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-}
+.icon-btn:hover { background: var(--btn-secondary); color: var(--text-primary);}
 
-.card-author {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.author-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.author-name {
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-.post-time {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
-.card-body p {
-    color: var(--text-secondary);
-    font-size: 1.05rem;
-    margin-bottom: 1rem;
-}
-
-.card-footer {
-    display: flex;
-    gap: 1.5rem;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    padding-top: 0.75rem;
-    margin-top: 0.75rem;
-}
-
-.action-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: var(--text-muted);
-    font-weight: 500;
-    transition: var(--transition-fast);
-}
-
-.action-btn:hover {
+.nav-action-btn {
+    display: flex; align-items: center; gap: 0.4rem;
+    background: var(--btn-secondary);
     color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    font-weight: 600; font-size: 0.9rem;
+    transition: 0.2s;
 }
 
-.active-like {
-    color: #ef4444 !important;
+.nav-action-btn:hover { background: var(--btn-secondary-hover); }
+
+.badge {
+    position: absolute;
+    top: 4px; right: 4px;
+    background: var(--accent-brand);
+    color: white; font-size: 0.6rem; font-weight: 800;
+    width: 14px; height: 14px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
 }
-.ml-auto { margin-left: auto; }
+
+.avatar-sm {
+    width: 32px; height: 32px; border-radius: var(--radius-sm); overflow: hidden;
+    background: #fff;
+    cursor: pointer;
+}
+.avatar-sm img { width: 100%; height: 100%; object-fit: cover; }
 
 /* ==========================================================================
-   Desafios Cards (Premium UI)
+   Main Reddit Layout
    ========================================================================== */
-.challenge-card {
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    background: linear-gradient(145deg, rgba(24,24,27,0.8) 0%, rgba(139,92,246,0.05) 100%);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-.card-edge-glow {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--accent-purple), transparent);
-}
-
-.challenge-badge {
-    background: rgba(249, 115, 22, 0.15);
-    color: var(--accent-orange);
-    border: 1px solid rgba(249, 115, 22, 0.3);
-    padding: 0.25rem 0.6rem;
-    border-radius: var(--radius-pill);
-    font-size: 0.75rem;
-    font-weight: 700;
+.reddit-layout {
     display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: calc(var(--topbar-height) + 1.5rem) 1.5rem 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-.challenge-badge i { width: 14px; height: 14px; }
+.feed-column {
+    flex: 1;
+    max-width: var(--feed-max-width);
+    display: flex; flex-direction: column; gap: 1rem;
+}
 
-.challenge-title {
-    font-size: 1.3rem;
+.sidebar-column {
+    display: none;
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (min-width: 992px) {
+    .sidebar-column { display: flex; }
+}
+
+/* ==========================================================================
+   Cards & Content Blocks
+   ========================================================================== */
+.card, .reddit-card, .sidebar-widget {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);  /* Distinctive sharp corners like Reddit */
+    transition: border-color 0.2s;
+}
+
+/* Create Post Box */
+.create-post-card {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.75rem 1rem;
+}
+
+.create-post-card .post-input {
+    flex: 1;
+    background: var(--btn-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.65rem 1rem;
+    border-radius: var(--radius-sm);
     color: var(--text-primary);
+}
+
+.create-post-card .post-input:hover { border-color: var(--border-hover); background: var(--bg-ground); }
+.create-post-card .post-input:focus { border-color: var(--text-secondary); background: var(--bg-ground); outline: none; }
+
+/* Reddit Post Card */
+.reddit-card {
+    display: flex;
+    cursor: pointer;
     margin-bottom: 0.5rem;
 }
 
-.challenge-desc {
+.reddit-card:-moz-drag-over {
+    border-color: var(--border-hover);
+}
+
+.reddit-card:hover {
+    border-color: var(--border-hover);
+}
+
+/* Left Vote Column */
+.vote-column {
+    width: 44px;
+    background: rgba(0,0,0,0.2);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 0.5rem 0;
+    border-top-left-radius: var(--radius-sm);
+    border-bottom-left-radius: var(--radius-sm);
+}
+
+.vote-btn {
     color: var(--text-secondary);
+    padding: 0.2rem;
+    border-radius: var(--radius-sm);
+    display: flex; justify-content: center;
+}
+.vote-btn i { width: 24px; }
+.vote-btn:hover { background: var(--border-color); }
+
+.upvote:hover { color: var(--upvote-color); background: rgba(255, 69, 0, 0.1); }
+.downvote:hover { color: var(--downvote-color); background: rgba(113, 147, 255, 0.1); }
+
+.vote-count {
+    font-size: 0.8rem; font-weight: 700;
+    margin: 0.25rem 0;
+    color: var(--text-primary);
 }
 
-.challenge-action-box {
-    margin-top: 1.5rem;
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+/* Content Column */
+.post-content-column {
+    flex: 1;
+    padding: 0.5rem 0.5rem 0.25rem 0.5rem;
 }
 
-.vs-container {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.post-meta {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.75rem; color: var(--text-muted);
+    margin-bottom: 0.5rem;
 }
 
-.vs-text {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    color: var(--text-muted);
-    font-style: italic;
+.avatar-xs { width: 16px; height: 16px; border-radius: 50%; background: #fff; overflow: hidden; display: flex; align-items: center; justify-content: center; color: #000; }
+.avatar-xs i { width: 12px; }
+.author-label { font-weight: 600; color: var(--text-primary); }
+
+.post-title {
+    font-size: 1.15rem; font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    font-weight: 600; margin-bottom: 0.5rem;
 }
 
-.skeleton-avatar {
-    background: rgba(255,255,255,0.1);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--text-muted);
+.post-body {
+    font-size: 0.875rem; color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
 }
 
-.btn-accent {
-    background: var(--text-primary);
-    color: var(--bg-dark);
-    padding: 0.6rem 1.25rem;
-    border-radius: var(--radius-pill);
-    font-weight: 700;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: var(--transition-bounce);
+/* Action Footer */
+.post-actions {
+    display: flex; align-items: center; gap: 0.25rem;
 }
 
-.btn-accent:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+.action-btn {
+    display: flex; align-items: center; gap: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.8rem; font-weight: 600;
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--radius-sm);
+    transition: 0.2s;
 }
 
-.pulse {
-    animation: pulse-ring 2s infinite;
-}
-
-@keyframes pulse-ring {
-    0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(255,255,255,0); }
-    100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
-}
-
-.scroll-pad { height: 100px; }
-
+.action-btn i { width: 18px; height: 18px; }
+.action-btn:hover { background: var(--btn-secondary); }
 
 /* ==========================================================================
-   Responsive: Mobile View (Bottom Navigation)
+   Empty State
    ========================================================================== */
+.empty-state {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    border: 1px dashed var(--border-hover);
+    border-radius: var(--radius-md);
+    margin-top: 0.5rem;
+    background: rgba(255,255,255,0.02);
+}
+
+.empty-icon { width: 48px; height: 48px; color: var(--border-hover); margin-bottom: 1rem; }
+.empty-state h2 { font-size: 1.25rem; margin-bottom: 0.5rem; color: var(--text-primary); font-family: 'Syne', sans-serif;}
+.empty-state p { font-size: 0.9rem; color: var(--text-secondary); max-width: 400px; }
+
+/* ==========================================================================
+   Sidebar Widgets
+   ========================================================================== */
+.widget-header {
+    background: rgba(255,255,255,0.03);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.widget-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; color: var(--text-secondary); font-family: 'Inter', sans-serif;}
+
+.widget-body { padding: 1rem; }
+.widget-desc { font-size: 0.85rem; margin-bottom: 1rem; color: var(--text-primary); }
+
+.widget-stats { display: flex; gap: 2rem; border-top: 1px solid var(--border-color); padding-top: 1rem; }
+.stat-box { display: flex; flex-direction: column; }
+.stat-num { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
+.stat-label { font-size: 0.75rem; color: var(--text-muted); }
+
+.trending-list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+.trending-list li { display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.25rem 0;}
+.trending-list li:hover .trending-info span { text-decoration: underline; }
+.trending-list i { color: var(--accent-brand); width: 20px; }
+.trending-info span { display: block; font-size: 0.9rem; font-weight: 500; }
+.trending-info small { color: var(--text-muted); font-size: 0.75rem; }
+
+.footer-links { font-size: 0.75rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.5rem; padding: 0 0.5rem;}
+.footer-links a { color: var(--text-muted); }
+.footer-links a:hover { text-decoration: underline; }
+
+/* ==========================================================================
+   Mobile Bottom Navigation
+   ========================================================================== */
+.mobile-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 52px;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 100;
+}
+
+.mobile-nav-item {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    color: var(--text-secondary);
+}
+.mobile-nav-item i { width: 22px; height: 22px; }
+.mobile-nav-item.active { color: var(--text-primary); }
+
 @media (max-width: 768px) {
-    .main-nav {
-        top: auto;
-        bottom: 0;
-        width: 100%;
-        height: 70px;
-        flex-direction: row;
-        border-right: none;
-        border-top: 1px solid var(--border-color);
-        padding: 0.5rem 1rem;
-        background: rgba(9, 9, 11, 0.85); /* Slightly less translucent on mobile */
-        justify-content: center;
-        padding-bottom: env(safe-area-inset-bottom, 0.5rem);
-    }
-    
-    .nav-brand { display: none; }
-    
-    .content-area {
-        margin-left: 0;
-    }
-    
-    .nav-links {
-        flex-direction: row;
-        justify-content: space-around;
-        width: 100%;
-        gap: 0;
-    }
-    
-    .nav-item {
-        margin-top: 0;
-    }
-    
-    .nav-link {
-        flex-direction: column;
-        gap: 0.2rem;
-        padding: 0.5rem;
-        font-size: 0; /* Hide default text gracefully */
-        justify-content: center;
-    }
-    
-    .mobile-hidden {
-        display: none;
-    }
-    
-    /* Revisa icones */
-    .nav-link i {
-        width: 24px; height: 24px;
-    }
-    
-    .nav-item.active .nav-link {
-        background: transparent;
-        border: none;
-        box-shadow: none;
-        color: var(--accent-purple);
-    }
-    
-    /* Floating action button (FAB) effect for CTA */
-    .nav-link.call-to-action {
-        position: absolute;
-        top: -25px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 56px; height: 56px;
-        border-radius: 50%;
-        box-shadow: 0 5px 20px var(--accent-purple-glow);
-    }
-    
-    .nav-item.action-wrapper {
-        position: static;
-    }
-    
-    /* Centralize o FAB no espaço ocupado na lista */
-    .nav-item:nth-child(3) {
-        width: 60px; /* Aloca espaço pro FAB na nav-links */
-    }
-    
-    .challenge-action-box {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
-    }
-    
-    .btn-accent {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .feed-container {
-        margin-top: 4rem;
-    }
+    .mobile-bottom-nav { display: flex; }
+    .topbar-center, .nav-action-btn, .topbar-right .badge { display: none; }
+    .mobile-menu-btn { display: flex; }
+    .reddit-layout { padding: calc(var(--topbar-height) + 0.5rem) 0 4rem; }
+    .feed-column { padding: 0; gap: 0.5rem; }
+    .create-post-card { border-radius: 0; border-left: none; border-right: none; }
+    .reddit-card { border-radius: 0; border-left: none; border-right: none; }
+    .empty-state { border-radius: 0; border-left: none; border-right: none; }
 }
