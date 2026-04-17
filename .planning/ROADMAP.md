@@ -22,3 +22,9 @@
 **Depends on:** Phase 3
 **Requirements:** REQ-08
 **State:** Not Started
+
+## Phase 5: Backend & System Integration (Security)
+**Goal:** Implantar todo o controle do lado do servidor (Server-side) atômico, de submissão de posts, validações rígidas dos resultados de minigames/votações e proteção central contra XSS.
+**Depends on:** Phase 4
+**Requirements:** REQ-09, REQ-10, REQ-11
+**State:** Not Started
