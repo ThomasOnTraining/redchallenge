@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DesafioHub</title>
+    <meta name="description" content="Plataforma gamificada de desafios e troca de conhecimento">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,24 +32,19 @@
                 <i data-lucide="swords"></i>
                 <span>Desafios</span>
             </a>
-            <a href="#" class="sidebar-link">
-                <i data-lucide="trending-up"></i>
+            <a href="#" class="sidebar-link" data-target="view-popular">
+                <i data-lucide="flame"></i>
                 <span>Popular</span>
             </a>
             <div class="sidebar-divider"></div>
             <div class="sidebar-group-title">Comunidades</div>
-            <a href="#" class="sidebar-link">
-                <div class="avatar-xs" style="background: var(--accent-brand); color: white;">T</div>
-                <span>Tech</span>
-            </a>
-            <a href="#" class="sidebar-link">
-                <div class="avatar-xs" style="background: #4ade80; color: white;">H</div>
-                <span>Saúde</span>
-            </a>
+            <div id="sidebar-communities">
+                <!-- Injected by JS -->
+            </div>
         </div>
     </nav>
 
-    <!-- Top Navigation (Reddit style) -->
+    <!-- Top Navigation -->
     <nav class="topbar">
         <div class="topbar-left">
             <button class="icon-btn mobile-menu-btn" aria-label="Menu">
@@ -64,6 +60,8 @@
             <div class="top-nav-tabs">
                 <button class="top-tab active" data-target="view-home">Feed</button>
                 <button class="top-tab" data-target="view-challenges">Desafios</button>
+                <button class="top-tab" data-target="view-popular">Popular</button>
+                <button class="top-tab" data-target="view-communities">Comunidades</button>
             </div>
             <div class="search-bar">
                 <i data-lucide="search" class="search-icon"></i>
@@ -72,73 +70,82 @@
         </div>
 
         <div class="topbar-right">
-            <button class="nav-action-btn pulse-target" aria-label="Criar Novo">
+            <button class="nav-action-btn pulse-target" aria-label="Criar Novo" id="topbar-create-btn">
                 <i data-lucide="plus"></i>
                 <span>Criar</span>
             </button>
             <button class="icon-btn" aria-label="Notificações">
                 <i data-lucide="bell"></i>
-                <span class="badge">1</span>
             </button>
-            <div class="profile-dropdown">
-                <div class="avatar-sm">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin&backgroundColor=1e1b4b" alt="Você">
-                </div>
+            <div id="auth-section">
+                <button class="nav-action-btn" id="login-trigger-btn" style="background: var(--btn-secondary); color: var(--text-primary);">
+                    <span>Entrar</span>
+                </button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Layout (2 Columns) -->
+    <!-- Main Layout -->
     <div class="reddit-layout">
-        
-        <!-- Left: Main Feed -->
         <main class="feed-column">
-            
+
             <!-- VIEW: HOME -->
             <div id="view-home" class="view active">
-                <!-- Create Post Box -->
-            <div class="card create-post-card">
-                <div class="avatar-sm">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin&backgroundColor=1e1b4b" alt="Você">
+                <div class="card create-post-card" id="create-post-home">
+                    <div class="avatar-sm" id="create-avatar-home">
+                        <i data-lucide="user"></i>
+                    </div>
+                    <input type="text" class="post-input" placeholder="Criar Postagem...">
+                    <button class="icon-btn" aria-label="Anexar Imagem"><i data-lucide="image"></i></button>
                 </div>
-                <input type="text" class="post-input" placeholder="Criar Postagem ou Propor Desafio">
-                <button class="icon-btn" aria-label="Anexar Imagem"><i data-lucide="image"></i></button>
-                <button class="icon-btn" aria-label="Anexar Link"><i data-lucide="link"></i></button>
+                <div class="feed-list" id="feed-container"></div>
             </div>
-
-            <!-- Feed Container (Dynamic rendering via JS) -->
-            <div class="feed-list" id="feed-container">
-                <!-- Empty State (No Fake Posts) -->
-                <div class="empty-state">
-                    <i data-lucide="inbox" class="empty-icon"></i>
-                    <h2>O seu feed está vazio.</h2>
-                    <p>Seja o primeiro a lançar um desafio para a comunidade ou explore novos tópicos.</p>
-                </div>
-                
-                <!-- JS Templates will be injected here -->
-            </div>
-            </div> <!-- End VIEW HOME -->
 
             <!-- VIEW: CHALLENGES -->
             <div id="view-challenges" class="view hidden">
                 <div class="card create-post-card challenge-input-card">
-                    <div class="avatar-sm">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin&backgroundColor=1e1b4b" alt="Você">
+                    <div class="avatar-sm" id="create-avatar-challenge">
+                        <i data-lucide="user"></i>
                     </div>
-                    <input type="text" class="challenge-input" placeholder="Propor um Desafio ou Quizz para a comunidade!">
+                    <div class="challenge-input-wrapper">
+                        <select class="challenge-type-select">
+                            <option value="quiz">Quiz Rápido</option>
+                            <option value="pilula">Pílula de Saber</option>
+                            <option value="duel">Duelo 1v1</option>
+                            <option value="collab">Meta Colaborativa</option>
+                        </select>
+                        <input type="text" class="challenge-input" placeholder="Propor um Desafio para a comunidade!">
+                    </div>
                     <button class="nav-action-btn pulse-target challenge-submit-btn">
                         <span>Lançar</span>
                     </button>
                 </div>
+                <div class="feed-list" id="challenges-container"></div>
+            </div>
 
-                <div class="feed-list" id="challenges-container">
-                    <!-- Challenges injected here -->
+            <!-- VIEW: POPULAR -->
+            <div id="view-popular" class="view hidden">
+                <div class="view-header">
+                    <i data-lucide="flame"></i>
+                    <h2>Popular</h2>
+                    <p>Os posts mais votados da comunidade</p>
                 </div>
-            </div> <!-- End VIEW CHALLENGES -->
+                <div class="feed-list" id="popular-container"></div>
+            </div>
+
+            <!-- VIEW: COMMUNITIES -->
+            <div id="view-communities" class="view hidden">
+                <div class="view-header">
+                    <i data-lucide="users"></i>
+                    <h2>Comunidades</h2>
+                    <p>Explore os tópicos e encontre a sua turma</p>
+                </div>
+                <div class="communities-grid" id="communities-container"></div>
+            </div>
 
         </main>
 
-        <!-- Right: Sidebar (Communities / Rules) -->
+        <!-- Right Sidebar -->
         <aside class="sidebar-column">
             <div class="sidebar-widget">
                 <div class="widget-header">
@@ -148,12 +155,12 @@
                     <p class="widget-desc">A comunidade focada em trocar conhecimentos por meio de micro-desafios e interação gamificada.</p>
                     <div class="widget-stats">
                         <div class="stat-box">
-                            <span class="stat-num">0</span>
+                            <span class="stat-num" id="stat-challenges">0</span>
                             <span class="stat-label">Desafios</span>
                         </div>
                         <div class="stat-box">
-                            <span class="stat-num">1</span>
-                            <span class="stat-label">Membro</span>
+                            <span class="stat-num" id="stat-members">0</span>
+                            <span class="stat-label">Membros</span>
                         </div>
                     </div>
                 </div>
@@ -164,21 +171,8 @@
                     <h3 class="widget-title">🔥 Destaques</h3>
                 </div>
                 <div class="widget-body">
-                    <ul class="trending-list">
-                        <li>
-                            <i data-lucide="trending-up"></i>
-                            <div class="trending-info">
-                                <span>#TechQuizz</span>
-                                <small>0 posts</small>
-                            </div>
-                        </li>
-                        <li>
-                            <i data-lucide="trending-up"></i>
-                            <div class="trending-info">
-                                <span>#MicroHabitos</span>
-                                <small>0 posts</small>
-                            </div>
-                        </li>
+                    <ul class="trending-list" id="trending-list">
+                        <li class="trending-empty">Nenhum destaque ainda</li>
                     </ul>
                 </div>
             </div>
@@ -192,16 +186,14 @@
         </aside>
     </div>
 
-    <!-- Config de Templates (Estrutura pronta para o Feed) -->
+    <!-- Post Template -->
     <template id="post-template">
         <article class="reddit-card">
-            <!-- Left Vote Column -->
             <div class="vote-column">
                 <button class="vote-btn upvote"><i data-lucide="arrow-big-up"></i></button>
                 <span class="vote-count">0</span>
                 <button class="vote-btn downvote"><i data-lucide="arrow-big-down"></i></button>
             </div>
-            <!-- Right Content Column -->
             <div class="post-content-column">
                 <div class="post-meta">
                     <div class="avatar-xs"><i data-lucide="user"></i></div>
@@ -209,26 +201,77 @@
                     <span class="time-label" data-value="time">agora</span>
                     <span class="badge-tag" data-value="tag" style="display: none;"></span>
                 </div>
-                <h2 class="post-title" data-value="title">Title Placeholder</h2>
-                <div class="post-body" data-value="body">Content Placeholder</div>
+                <h2 class="post-title" data-value="title">Title</h2>
+                <div class="post-body" data-value="body"></div>
                 
                 <div class="post-actions">
-                    <button class="action-btn"><i data-lucide="message-square"></i> <span data-value="comments">0</span> Comentários</button>
+                    <button class="action-btn comment-toggle-btn"><i data-lucide="message-square"></i> <span data-value="comments">0</span> Comentários</button>
                     <button class="action-btn"><i data-lucide="share"></i> Compartilhar</button>
                     <button class="action-btn"><i data-lucide="bookmark"></i> Salvar</button>
+                </div>
+
+                <!-- Collapsible Comments Section -->
+                <div class="comments-section" style="display: none;">
+                    <div class="comments-list"></div>
+                    <div class="comment-input-row">
+                        <input type="text" class="comment-input" placeholder="Escreva um comentário..." maxlength="2000">
+                        <button class="comment-send-btn"><i data-lucide="send"></i></button>
+                    </div>
                 </div>
             </div>
         </article>
     </template>
 
-    <!-- Mobile Bottom Navigation (Visible only on mobile) -->
+    <!-- Mobile Bottom Navigation -->
     <nav class="mobile-bottom-nav">
         <a href="#" class="mobile-nav-item active" data-target="view-home"><i data-lucide="home"></i></a>
         <a href="#" class="mobile-nav-item" data-target="view-challenges"><i data-lucide="swords"></i></a>
-        <a href="#" class="mobile-nav-item create-btn"><i data-lucide="plus"></i></a>
-        <a href="#" class="mobile-nav-item"><i data-lucide="message-circle"></i></a>
+        <a href="#" class="mobile-nav-item" data-target="view-popular"><i data-lucide="flame"></i></a>
+        <a href="#" class="mobile-nav-item" data-target="view-communities"><i data-lucide="users"></i></a>
         <a href="#" class="mobile-nav-item"><i data-lucide="user"></i></a>
     </nav>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="auth-overlay">
+        <div class="auth-card">
+            <button id="auth-close-btn" class="auth-close" aria-label="Fechar">
+                <i data-lucide="x"></i>
+            </button>
+            <div class="auth-brand">
+                <div class="auth-brand-icon">
+                    <i data-lucide="zap"></i>
+                </div>
+                <h2 id="auth-title" class="auth-title">Entrar no DesafioHub</h2>
+                <p class="auth-subtitle">Participe dos desafios e conquiste a comunidade</p>
+            </div>
+            <div id="auth-error" class="auth-error" style="display: none;">
+                <i data-lucide="alert-circle"></i>
+                <span id="auth-error-msg"></span>
+            </div>
+            <div class="auth-form">
+                <div class="auth-input-group">
+                    <i data-lucide="user" class="auth-input-icon"></i>
+                    <input type="text" id="auth-username" placeholder="Nome de usuário" maxlength="30" autocomplete="username">
+                </div>
+                <div class="auth-input-group">
+                    <i data-lucide="lock" class="auth-input-icon"></i>
+                    <input type="password" id="auth-password" placeholder="Senha" maxlength="128" autocomplete="current-password">
+                    <button type="button" class="auth-eye-btn" aria-label="Mostrar senha">
+                        <i data-lucide="eye"></i>
+                    </button>
+                </div>
+                <button id="auth-submit-btn" class="auth-submit">
+                    <span class="auth-submit-text">Entrar</span>
+                    <div class="auth-spinner" style="display: none;"></div>
+                </button>
+            </div>
+            <div class="auth-footer">
+                <span id="auth-toggle-text">Não tem uma conta?</span>
+                <a href="#" id="auth-toggle-btn">Cadastre-se</a>
+            </div>
+            <div class="auth-glow"></div>
+        </div>
+    </div>
 
     <script src="js/script.js"></script>
 </body>

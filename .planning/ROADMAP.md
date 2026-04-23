@@ -15,16 +15,16 @@
 **Goal:** Implementar as áreas ativas de interatividade e a aba explícita dos desafios padrão (Pílulas de Saber e Quizzes rápidos).
 **Depends on:** Phase 2
 **Requirements:** REQ-04, REQ-06, REQ-07
-**State:** In Progress
+**State:** Completed
 
 ## Phase 4: Gamificação Avançada
 **Goal:** Projetar as mecânicas finais introduzidas: lógica visual do Duelo (1 vs 1) e da Barra de Progresso Colaborativa para os Desafios Sociais, integrando aos cards.
 **Depends on:** Phase 3
 **Requirements:** REQ-08
-**State:** Not Started
+**State:** Completed
 
 ## Phase 5: Backend & System Integration (Security)
 **Goal:** Implantar todo o controle do lado do servidor (Server-side) atômico, de submissão de posts, validações rígidas dos resultados de minigames/votações e proteção central contra XSS.
 **Depends on:** Phase 4
 **Requirements:** REQ-09, REQ-10, REQ-11
-**State:** Not Started
+**State:** Completed

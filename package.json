@@ -21,9 +21,13 @@
   },
   "homepage": "https://github.com/ThomasOnTraining/redchallenge#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "sqlite3": "^6.0.1"
+    "express-rate-limit": "^8.4.0",
+    "jsonwebtoken": "^9.0.3",
+    "sqlite3": "^6.0.1",
+    "xss": "^1.0.15"
   }
 }
