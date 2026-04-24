@@ -1,0 +1,72 @@
+Projeto: Reddit + Desafios
+
+Fase 1 — Problema
+Uso excessivo de redes sociais sem aprendizado, dificuldade com conteúdos longos e pouco
+acesso a aprendizado rápido.
+
+Ideias Criadas
+1. Site de curiosidades
+2. App de rotina de estudos
+3. Plataforma estilo Reddit com desafios (escolhida)
+
+Fase 2 — Definição
+Objetivo: oferecer conteúdos rápidos e desafios interativos.
+Público: jovens e usuários da internet.
+Problema: falta de conteúdo útil e interativo.
+
+Fase 3 — Requisitos
+Funcionais: criar posts, comentar e participar de desafios.
+Não funcionais: sistema simples, rápido e organizado.
+
+Estrutura
+Site com HTML, CSS e JavaScript.
+Feed de posts e área de desafios.
+Layout simples e intuitivo.
+
+Funcionalidades
+Visualizar conteúdos, interagir, participar de desafios e navegação fácil.
+
+
+Projeto: Reddit + Desafios
+
+Nomes: Andriellyn, Giovana, Ruan, Gabriel, Thomas
+
+Nome do Sistema
+Reddit + Desafios
+
+Objetivo
+O objetivo do sistema é criar uma plataforma interativa que una entretenimento e interação,
+permitindo que os usuários compartilhem conteúdos e participem de desafios de forma
+rápida, divertida e dinâmica.
+
+Público-alvo
+O site é voltado para jovens, estudantes e pessoas que utilizam a internet com frequência e
+buscam entretenimento rápido e interativo.
+
+Problema que será resolvido
+O sistema busca resolver o uso excessivo de redes sociais sem conteúdo útil, a dificuldade
+de atenção em conteúdos longos e a falta de plataformas que unam interação e desafios de
+forma simples e acessível.
+
+Projeto: Reddit + Desafios (Protótipo)
+Nomes: Andriellyn, Giovana, Ruan, Gabriel e Thomas
+
+Requisitos Funcionais
+1. Exibir página inicial com nome do site.
+2. Mostrar posts em formato de feed.
+3. Apresentar área de desafios.
+4. Ter botões de interação (curtir e comentar).
+5. Permitir navegação entre seções.
+
+Requisitos Não Funcionais
+1. Visual organizado e agradável.
+2. Simples e fácil de entender.
+3. Carregamento rápido.
+
+Funcionalidades Principais
+O protótipo apresenta um feed de posts, área de desafios e botões de interação, mostrando
+de forma visual como o sistema funcionaria.
+
+Estrutura da Solução
+Protótipo de site feito com HTML, CSS e JavaScript, contendo página inicial, feed, seção de
+desafios e navegação básica.

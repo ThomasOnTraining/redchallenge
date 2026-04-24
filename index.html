@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Questly</title>
+    <meta name="description" content="Plataforma gamificada de desafios e troca de conhecimento">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .tictactoe-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: var(--border-color); width: 100%; max-width: 250px; margin: 1rem auto; border-radius: 8px; padding: 4px; }
+        .tictactoe-cell { background: var(--bg-color); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; color: var(--text-primary); cursor: pointer; border-radius: 4px; transition: background 0.2s; user-select: none; }
+        .tictactoe-cell:hover:not(.occupied) { background: var(--surface-color); }
+        .tictactoe-cell.x { color: var(--accent-brand); }
+        .tictactoe-cell.o { color: var(--downvote-color); }
+        .tictactoe-cell.occupied { cursor: default; }
+        .challenge-badge { background: var(--accent-brand); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+        .challenge-progress { margin: 1rem 0; }
+        .progress-bar { height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden; position: relative; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent-brand), #8b5cf6); transition: width 0.3s ease; }
+        .duel-status { text-align: center; margin-bottom: 0.5rem; font-weight: bold; color: var(--text-secondary); }
+    
+        /* ======== CHALLENGES HUB LAYOUT ======== */
+        /* When challenges is active: expand feed-column, hide right sidebar */
+        .feed-column:has(#view-challenges:not(.hidden)) {
+            max-width: 100%;
+        }
+        .feed-column:has(#view-challenges:not(.hidden)) ~ .sidebar-column {
+            display: none !important;
+        }
+
+        .challenges-hub {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 1.5rem;
+            width: 100%;
+        }
+        @media (max-width: 960px) {
+            .challenges-hub { grid-template-columns: 1fr; }
+        }
+
+        /* Daily Quests Row */
+        .daily-quests-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+        @media (max-width: 640px) {
+            .daily-quests-row { grid-template-columns: 1fr; }
+        }
+
+        .quest-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            transition: border-color 0.2s;
+        }
+        .quest-card:hover { border-color: var(--accent-brand); }
+        .quest-card .quest-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .quest-card .quest-meta {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .quest-card .quest-accept-btn {
+            background: var(--accent-brand);
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.15s;
+            text-align: center;
+            margin-top: auto;
+        }
+        .quest-card .quest-accept-btn:hover {
+            background: #e03d00;
+        }
+
+        /* Create challenge card */
+        .ch-create-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 69, 0, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .ch-create-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .ch-create-card select,
+        .ch-create-card input[type="number"] {
+            background: var(--btn-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.6rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+        }
+        .ch-create-card select:focus,
+        .ch-create-card input:focus { outline: none; border-color: var(--accent-brand); }
+        .ch-create-card .ch-text-input {
+            flex: 1;
+            background: var(--btn-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.6rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+        }
+        .ch-create-card .ch-text-input:focus { outline: none; border-color: var(--accent-brand); }
+        .ch-submit-btn {
+            background: var(--accent-brand);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .ch-submit-btn:hover { background: #e03d00; }
+
+        /* Ranking Sidebar */
+        .rank-widget {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            position: sticky;
+            top: 80px;
+            overflow: hidden;
+        }
+        .rank-widget-header {
+            background: linear-gradient(135deg, var(--accent-brand), #c43200);
+            padding: 1rem 1.25rem;
+        }
+        .rank-widget-header h3 {
+            color: #fff;
+            font-family: 'Syne', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            margin: 0;
+        }
+        .rank-list { list-style: none; padding: 0; margin: 0; }
+        .rank-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.15s;
+        }
+        .rank-item:last-child { border-bottom: none; }
+        .rank-item:hover { background: var(--bg-card-hover); }
+        .rank-pos {
+            font-weight: 800;
+            font-size: 0.85rem;
+            min-width: 22px;
+            color: var(--text-muted);
+        }
+        .rank-item:nth-child(1) .rank-pos { color: #f59e0b; }
+        .rank-item:nth-child(2) .rank-pos { color: #a1a1aa; }
+        .rank-item:nth-child(3) .rank-pos { color: #b45309; }
+        .rank-name {
+            flex: 1;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .rank-xp {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--accent-brand);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="noise-bg"></div>
+    <div id="drawer-overlay" class="drawer-overlay"></div>
+
+    <!-- Side Navigation Sidebar -->
+    <nav id="side-navigation" class="side-navigation">
+        <div class="sidebar-header">
+            <i data-lucide="zap" class="brand-icon"></i>
+            <span class="brand-text">Quest<span class="highlight">ly</span></span>
+        </div>
+        <div class="sidebar-links">
+            <a href="#" class="sidebar-link active" data-target="view-home">
+                <i data-lucide="home"></i>
+                <span>Início</span>
+            </a>
+            <a href="#" class="sidebar-link" data-target="view-challenges">
+                <i data-lucide="swords"></i>
+                <span>Desafios</span>
+            </a>
+            <a href="#" class="sidebar-link" data-target="view-popular">
+                <i data-lucide="flame"></i>
+                <span>Popular</span>
+            </a>
+            <a href="#" class="sidebar-link" data-target="view-settings" id="nav-settings" style="display: none;">
+                <i data-lucide="settings"></i>
+                <span>Configurações</span>
+            </a>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-group-title">Comunidades</div>
+            <div id="sidebar-communities">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Top Navigation -->
+    <nav class="topbar">
+        <div class="topbar-left">
+            <button class="icon-btn mobile-menu-btn" aria-label="Menu">
+                <i data-lucide="menu"></i>
+            </button>
+            <div class="nav-brand">
+                <i data-lucide="zap" class="brand-icon"></i>
+                <span class="brand-text">Quest<span class="highlight">ly</span></span>
+            </div>
+        </div>
+
+        <div class="topbar-center">
+            <div class="top-nav-tabs">
+                <button class="top-tab active" data-target="view-home">Feed</button>
+                <button class="top-tab" data-target="view-challenges">Desafios</button>
+                <button class="top-tab" data-target="view-popular">Popular</button>
+                <button class="top-tab" data-target="view-communities">Comunidades</button>
+            </div>
+            <div class="search-bar">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" placeholder="Buscar no Questly...">
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="nav-action-btn pulse-target" aria-label="Criar Novo" id="topbar-create-btn">
+                <i data-lucide="plus"></i>
+                <span>Criar</span>
+            </button>
+            <div id="notifications-section" style="position: relative;">
+                <button class="icon-btn" aria-label="Notificações" id="notifications-trigger">
+                    <i data-lucide="bell"></i>
+                    <span id="notifications-badge" style="display: none; position: absolute; top: 0; right: 0; background: #ef4444; color: white; border-radius: 50%; font-size: 0.65rem; width: 16px; height: 16px; align-items: center; justify-content: center; font-weight: bold;">0</span>
+                </button>
+                <div id="notifications-dropdown" style="display: none; position: absolute; top: 100%; right: 0; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; width: 300px; max-height: 400px; overflow-y: auto; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.5); margin-top: 0.5rem; flex-direction: column;">
+                    <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color); font-weight: bold; color: var(--text-primary); display: flex; justify-content: space-between; align-items: center;">
+                        Notificações
+                    </div>
+                    <div id="notifications-list" style="display: flex; flex-direction: column;">
+                        <!-- Notifications will be rendered here -->
+                    </div>
+                </div>
+            </div>
+            <div id="auth-section">
+                <button class="nav-action-btn" id="login-trigger-btn" style="background: var(--btn-secondary); color: var(--text-primary);">
+                    <span>Entrar</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="reddit-layout">
+        <main class="feed-column">
+
+            <!-- VIEW: HOME -->
+            <div id="view-home" class="view active">
+                <div class="card create-post-card" id="create-post-home">
+                    <div class="avatar-sm" id="create-avatar-home">
+                        <i data-lucide="user"></i>
+                    </div>
+                    <input type="text" class="post-input" placeholder="Criar Postagem...">
+                    <button class="icon-btn" aria-label="Anexar Imagem"><i data-lucide="image"></i></button>
+                </div>
+                <div class="feed-list" id="feed-container"></div>
+            </div>
+
+            <!-- VIEW: CHALLENGES -->
+            <div id="view-challenges" class="view hidden">
+                <div class="view-header" style="margin-bottom: 1rem;">
+                    <i data-lucide="swords"></i>
+                    <h2>Desafios</h2>
+                    <p>Missões diárias, duelos 1v1 e ranking global</p>
+                </div>
+
+                <div class="challenges-hub">
+                    <!-- Left: Main Content -->
+                    <div style="min-width: 0;">
+                        <!-- Daily Quests -->
+                        <h3 style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); font-weight: 600; margin-bottom: 0.75rem;">Missões do Dia</h3>
+                        <div class="daily-quests-row" id="daily-quests-container">
+                            <!-- Injected by JS -->
+                        </div>
+
+                        <!-- Create Challenge -->
+                        <div class="ch-create-card">
+                            <div class="ch-create-row" style="align-items: center;">
+                                <div class="avatar-sm" id="create-avatar-challenge">
+                                    <i data-lucide="user"></i>
+                                </div>
+                                <input type="text" class="ch-text-input challenge-input" placeholder="Criar um novo desafio..." style="flex: 1;">
+                                <select class="challenge-type-select" style="width: auto; background: var(--btn-secondary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 0.5rem; border-radius: var(--radius-sm); font-size: 0.85rem;">
+                                    <option value="personal">Solo</option>
+                                    <option value="duel_tictactoe">Duelo</option>
+                                </select>
+                                <button class="ch-submit-btn challenge-submit-btn">Publicar</button>
+                            </div>
+                        </div>
+
+                        <!-- Feed -->
+                        <div class="feed-list" id="challenges-container"></div>
+                    </div>
+
+                    <!-- Right: Ranking -->
+                    <div>
+                        <div class="rank-widget">
+                            <div class="rank-widget-header">
+                                <h3>🏆 Ranking Global</h3>
+                            </div>
+                            <ul class="rank-list" id="rankings-list">
+                                <li class="rank-item" style="color: var(--text-muted);">Carregando...</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- VIEW: POPULAR -->
+            <div id="view-popular" class="view hidden">
+                <div class="view-header">
+                    <i data-lucide="flame"></i>
+                    <h2>Popular</h2>
+                    <p>Os posts mais votados da comunidade</p>
+                </div>
+                <div class="feed-list" id="popular-container"></div>
+            </div>
+
+            <!-- VIEW: COMMUNITIES -->
+            <div id="view-communities" class="view hidden">
+                <div class="view-header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <i data-lucide="users"></i>
+                        <h2>Comunidades</h2>
+                        <p>Explore os tópicos e encontre a sua turma</p>
+                    </div>
+                    <button class="nav-action-btn pulse-target" id="btn-open-create-community">
+                        <i data-lucide="plus"></i>
+                        <span>Criar</span>
+                    </button>
+                </div>
+                <div class="search-bar" style="margin-bottom: 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="community-search-input" placeholder="Pesquisar comunidades...">
+                </div>
+                <div class="communities-grid" id="communities-container"></div>
+            </div>
+
+            <!-- VIEW: SINGLE COMMUNITY -->
+            <div id="view-single-community" class="view hidden">
+                <div class="community-banner" id="single-community-banner" style="height: 100px; border-radius: 12px 12px 0 0; background: #3b82f6;"></div>
+                <div class="view-header" style="margin-top: -30px; position: relative; z-index: 2; display: flex; align-items: center; gap: 15px; padding: 0 20px;">
+                    <div id="single-community-icon" style="width: 60px; height: 60px; border-radius: 12px; background: #1a1a24; display: flex; align-items: center; justify-content: center; border: 3px solid #1a1a24;">
+                        <i data-lucide="users" style="color: #3b82f6; width: 30px; height: 30px;"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <h2 id="single-community-name" style="margin: 0; padding-top: 15px;">Nome da Comunidade</h2>
+                        <p id="single-community-desc" style="margin: 5px 0 0 0; color: #a1a1aa;">Descrição da comunidade</p>
+                    </div>
+                    <button class="icon-btn" id="btn-back-to-communities" aria-label="Voltar" style="background: rgba(255, 255, 255, 0.1);"><i data-lucide="arrow-left"></i></button>
+                </div>
+                
+                <div class="card create-post-card" style="margin-top: 20px;">
+                    <div class="avatar-sm">
+                        <i data-lucide="user"></i>
+                    </div>
+                    <input type="text" class="post-input" id="community-post-input" placeholder="Postar nesta comunidade...">
+                    <button class="icon-btn" aria-label="Anexar Imagem"><i data-lucide="image"></i></button>
+                </div>
+                
+                <div class="feed-list" id="single-community-feed-container"></div>
+            </div>
+
+            <!-- VIEW: SETTINGS -->
+            <div id="view-settings" class="view hidden">
+                <div class="view-header">
+                    <i data-lucide="settings"></i>
+                    <h2>Configurações</h2>
+                    <p>Gerencie seu perfil e segurança</p>
+                </div>
+
+                <div class="card" style="margin-top: 20px;">
+                    <div id="settings-error" class="auth-error" style="display: none; margin-bottom: 1rem;">
+                        <i data-lucide="alert-circle"></i><span id="settings-error-msg"></span>
+                    </div>
+                    <div id="settings-success" class="auth-error" style="display: none; margin-bottom: 1rem; background: rgba(34, 197, 94, 0.1); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.2);">
+                        <i data-lucide="check-circle"></i><span id="settings-success-msg"></span>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display:block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">URL do Avatar</label>
+                        <input type="text" id="settings-avatar" class="post-input" placeholder="https://..." style="width: 100%;">
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display:block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Nome de Usuário (Pode ser alterado 1x a cada 30 dias)</label>
+                        <input type="text" id="settings-username" class="post-input" style="width: 100%;">
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display:block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Senha Atual (Necessária para alterar a senha)</label>
+                        <input type="password" id="settings-old-password" class="post-input" placeholder="Sua senha atual" style="width: 100%;">
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display:block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Nova Senha</label>
+                        <input type="password" id="settings-new-password" class="post-input" placeholder="Nova senha" style="width: 100%;">
+                    </div>
+
+                    <button id="btn-save-settings" class="nav-action-btn pulse-target" style="width: 100%; justify-content: center;">
+                        <span id="btn-save-settings-text">Salvar Alterações</span>
+                        <div id="settings-spinner" class="auth-spinner" style="display: none;"></div>
+                    </button>
+                </div>
+
+                <div class="card" style="margin-top: 20px; border: 1px solid rgba(220, 38, 38, 0.3); background: rgba(220, 38, 38, 0.05);">
+                    <h3 style="color: #ef4444; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="alert-triangle"></i> Zona de Perigo
+                    </h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                        A exclusão da conta é permanente e removerá todos os seus posts, comentários e votos.
+                    </p>
+                    <button id="btn-delete-account" style="background: rgba(220, 38, 38, 0.1); color: #ef4444; border: 1px solid rgba(220, 38, 38, 0.2); padding: 0.75rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.2s ease;">
+                        Deletar Minha Conta
+                    </button>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="sidebar-column">
+            <div class="sidebar-widget">
+                <div class="widget-header">
+                    <h3 class="widget-title">Sobre o Questly</h3>
+                </div>
+                <div class="widget-body">
+                    <p class="widget-desc">Transforme seu conhecimento em XP! Encare missões diárias, duele com amigos e mostre quem manda na comunidade. 🚀</p>
+                    <div class="widget-stats">
+                        <div class="stat-box">
+                            <span class="stat-num" id="stat-challenges">0</span>
+                            <span class="stat-label">Desafios</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-num" id="stat-members">0</span>
+                            <span class="stat-label">Membros</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            
+            <div class="footer-links">
+                <a href="#">Regras</a> • 
+                <a href="#">Ajuda</a> • 
+                <a href="#">Privacidade</a>
+                <p>Questly © 2026</p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Post Template -->
+    <template id="post-template">
+        <article class="reddit-card">
+            <div class="vote-column">
+                <button class="vote-btn upvote"><i data-lucide="arrow-big-up"></i></button>
+                <span class="vote-count">0</span>
+                <button class="vote-btn downvote"><i data-lucide="arrow-big-down"></i></button>
+            </div>
+            <div class="post-content-column">
+                <div class="post-meta">
+                    <div class="avatar-xs"><i data-lucide="user"></i></div>
+                    <span class="author-label" data-value="author">Username</span>
+                    <span class="time-label" data-value="time">agora</span>
+                    <span class="badge-tag" data-value="tag" style="display: none;"></span>
+                </div>
+                <h2 class="post-title" data-value="title">Title</h2>
+                <div class="post-body" data-value="body"></div>
+                
+                <div class="post-actions">
+                    <button class="action-btn comment-toggle-btn"><i data-lucide="message-square"></i> <span data-value="comments">0</span> Comentários</button>
+                    <button class="action-btn"><i data-lucide="share"></i> Compartilhar</button>
+                    <button class="action-btn"><i data-lucide="bookmark"></i> Salvar</button>
+                </div>
+
+                <!-- Collapsible Comments Section -->
+                <div class="comments-section" style="display: none;">
+                    <div class="comments-list"></div>
+                    <div class="comment-input-row">
+                        <input type="text" class="comment-input" placeholder="Escreva um comentário..." maxlength="2000">
+                        <button class="comment-send-btn"><i data-lucide="send"></i></button>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </template>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav">
+        <a href="#" class="mobile-nav-item active" data-target="view-home"><i data-lucide="home"></i></a>
+        <a href="#" class="mobile-nav-item" data-target="view-challenges"><i data-lucide="swords"></i></a>
+        <a href="#" class="mobile-nav-item" data-target="view-popular"><i data-lucide="flame"></i></a>
+        <a href="#" class="mobile-nav-item" data-target="view-communities"><i data-lucide="users"></i></a>
+        <a href="#" class="mobile-nav-item"><i data-lucide="user"></i></a>
+    </nav>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="auth-overlay">
+        <div class="auth-card">
+            <button id="auth-close-btn" class="auth-close" aria-label="Fechar">
+                <i data-lucide="x"></i>
+            </button>
+            <div class="auth-brand">
+                <div class="auth-brand-icon">
+                    <i data-lucide="zap"></i>
+                </div>
+                <h2 id="auth-title" class="auth-title">Entrar no Questly</h2>
+                <p class="auth-subtitle">Participe dos desafios e conquiste a comunidade</p>
+            </div>
+            <div id="auth-error" class="auth-error" style="display: none;">
+                <i data-lucide="alert-circle"></i>
+                <span id="auth-error-msg"></span>
+            </div>
+            <div class="auth-form">
+                <div class="auth-input-group">
+                    <i data-lucide="user" class="auth-input-icon"></i>
+                    <input type="text" id="auth-username" placeholder="Nome de usuário" maxlength="30" autocomplete="username">
+                </div>
+                <div class="auth-input-group">
+                    <i data-lucide="lock" class="auth-input-icon"></i>
+                    <input type="password" id="auth-password" placeholder="Senha" maxlength="128" autocomplete="current-password">
+                    <button type="button" class="auth-eye-btn" aria-label="Mostrar senha">
+                        <i data-lucide="eye"></i>
+                    </button>
+                </div>
+                <button id="auth-submit-btn" class="auth-submit">
+                    <span class="auth-submit-text">Entrar</span>
+                    <div class="auth-spinner" style="display: none;"></div>
+                </button>
+            </div>
+            <div class="auth-footer">
+                <span id="auth-toggle-text">Não tem uma conta?</span>
+                <a href="#" id="auth-toggle-btn">Cadastre-se</a>
+            </div>
+            <div class="auth-glow"></div>
+        </div>
+    </div>
+
+    <!-- Create Community Modal -->
+    <div id="create-community-modal" class="auth-overlay" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity 0.3s ease;">
+        <div class="auth-card" style="width: 100%; max-width: 400px;">
+            <button id="close-create-community-btn" class="auth-close" aria-label="Fechar">
+                <i data-lucide="x"></i>
+            </button>
+            <div class="auth-brand">
+                <div class="auth-brand-icon">
+                    <i data-lucide="users"></i>
+                </div>
+                <h2 class="auth-title">Criar Comunidade</h2>
+                <p class="auth-subtitle">Crie seu próprio espaço de discussões</p>
+            </div>
+            <div id="create-community-error" class="auth-error" style="display: none;">
+                <i data-lucide="alert-circle"></i>
+                <span id="create-community-error-msg"></span>
+            </div>
+            <div class="auth-form">
+                <div class="auth-input-group">
+                    <i data-lucide="type" class="auth-input-icon"></i>
+                    <input type="text" id="community-name" placeholder="Nome da comunidade" maxlength="50">
+                </div>
+                <div class="auth-input-group">
+                    <i data-lucide="align-left" class="auth-input-icon"></i>
+                    <input type="text" id="community-desc" placeholder="Descrição curta" maxlength="200">
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="auth-input-group" style="flex: 1;">
+                        <i data-lucide="palette" class="auth-input-icon"></i>
+                        <input type="color" id="community-color" value="#ff4500" style="padding: 0; height: 45px; cursor: pointer;">
+                    </div>
+                    <div class="auth-input-group" style="flex: 1;">
+                        <i data-lucide="smile" class="auth-input-icon"></i>
+                        <input type="text" id="community-icon" placeholder="Ícone (ex: zap)" value="users">
+                    </div>
+                </div>
+                <button id="submit-create-community-btn" class="auth-submit">
+                    <span id="create-community-btn-text">Criar</span>
+                    <div id="create-community-spinner" class="auth-spinner" style="display: none;"></div>
+                </button>
+            </div>
+            <div class="auth-glow"></div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
